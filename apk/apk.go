@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/shogo82148/androidbinary"
 
@@ -147,6 +148,32 @@ func (k *Apk) MainActivity() (activity string, err error) {
 		for _, intent := range act.IntentFilters {
 			if isMainIntentFilter(intent) {
 				return act.TargetActivity.String()
+			}
+		}
+	}
+
+	return "", newError("No main activity found")
+}
+
+// ClickableMainActivity returns the name of the main activity.
+func (k *Apk) ClickableMainActivity() (activity string, err error) {
+	isTrue := func(str string) bool {
+		return !strings.Contains(str, "false")
+	}
+
+	for _, act := range k.manifest.App.Activities {
+		for _, intent := range act.IntentFilters {
+			clickable := isTrue(act.Enabled.MustString()) && isTrue(act.Exported.MustString())
+			if isMainIntentFilter(intent) && clickable {
+				return act.Name.String()
+			}
+		}
+	}
+	for _, act := range k.manifest.App.ActivityAliases {
+		for _, intent := range act.IntentFilters {
+			clickable := isTrue(act.Enabled.MustString()) && isTrue(act.Exported.MustString())
+			if isMainIntentFilter(intent) && clickable {
+				return act.Name.String()
 			}
 		}
 	}

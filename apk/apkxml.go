@@ -34,6 +34,8 @@ type AppActivity struct {
 	Name              androidbinary.String   `xml:"http://schemas.android.com/apk/res/android name,attr"`
 	Label             androidbinary.String   `xml:"http://schemas.android.com/apk/res/android label,attr"`
 	ScreenOrientation androidbinary.String   `xml:"http://schemas.android.com/apk/res/android screenOrientation,attr"`
+	Enabled           androidbinary.String     `xml:"http://schemas.android.com/apk/res/android enabled,attr"`
+	Exported          androidbinary.String     `xml:"http://schemas.android.com/apk/res/android exported,attr"`
 	IntentFilters     []ActivityIntentFilter `xml:"intent-filter"`
 }
 
@@ -42,6 +44,8 @@ type AppActivityAlias struct {
 	Name           androidbinary.String   `xml:"http://schemas.android.com/apk/res/android name,attr"`
 	Label          androidbinary.String   `xml:"http://schemas.android.com/apk/res/android label,attr"`
 	TargetActivity androidbinary.String   `xml:"http://schemas.android.com/apk/res/android targetActivity,attr"`
+	Enabled        androidbinary.String     `xml:"http://schemas.android.com/apk/res/android enabled,attr"`
+	Exported       androidbinary.String     `xml:"http://schemas.android.com/apk/res/android exported,attr"`
 	IntentFilters  []ActivityIntentFilter `xml:"intent-filter"`
 }
 
