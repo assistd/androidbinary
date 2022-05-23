@@ -157,13 +157,13 @@ func (k *Apk) MainActivity() (activity string, err error) {
 
 // ClickableMainActivity returns the name of the main activity.
 func (k *Apk) ClickableMainActivity() (activity string, err error) {
-	isTrue := func(str string) bool {
-		return !strings.Contains(str, "false")
+	isTrue := func(str androidbinary.String) bool {
+		return !strings.Contains(str.AlwaysString(), "false")
 	}
 
 	for _, act := range k.manifest.App.Activities {
 		for _, intent := range act.IntentFilters {
-			clickable := isTrue(act.Enabled.MustString()) && isTrue(act.Exported.MustString())
+			clickable := isTrue(act.Enabled) && isTrue(act.Exported)
 			if isMainIntentFilter(intent) && clickable {
 				return act.Name.String()
 			}
@@ -171,7 +171,7 @@ func (k *Apk) ClickableMainActivity() (activity string, err error) {
 	}
 	for _, act := range k.manifest.App.ActivityAliases {
 		for _, intent := range act.IntentFilters {
-			clickable := isTrue(act.Enabled.MustString()) && isTrue(act.Exported.MustString())
+			clickable := isTrue(act.Enabled) && isTrue(act.Exported)
 			if isMainIntentFilter(intent) && clickable {
 				return act.Name.String()
 			}

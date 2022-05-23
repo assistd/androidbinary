@@ -325,3 +325,26 @@ func (v String) MustString() string {
 	}
 	return ret
 }
+
+// AlwaysString is same as String, but it no panics if it fails to parse the value and return empty str.
+func (v String) AlwaysString() string {
+	if !IsResID(v.value) {
+		return v.value
+	}
+	id, err := ParseResID(v.value)
+	if err != nil {
+		return ""
+	}
+	value, err := v.table.GetResource(id, v.config)
+	if err != nil {
+		return ""
+	}
+	switch v := value.(type) {
+	case string:
+		return v
+	case bool:
+		return fmt.Sprintf("%v", v)
+	default:
+		return ""
+	}
+}
